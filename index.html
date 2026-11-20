@@ -9,42 +9,63 @@
 </head>
 <body>
   <main class="laboratorio">
-    <header class="encabezado">
+    <header class="cabecera">
       <span class="simbolo" aria-hidden="true">pH</span>
-      <h1 id="titulo">Detectives del pH</h1>
+      <h1 data-texto="titulo">Detectives del pH</h1>
     </header>
 
-    <section id="inicio" class="panel" aria-labelledby="selector">
-      <h2 id="selector" tabindex="-1">
-        Elige tu idioma / <span lang="en">Choose your language</span>
-      </h2>
+    <section id="inicio" class="panel">
+      <h2 id="selector" tabindex="-1" data-texto="idioma"></h2>
+      <div class="botones idiomas">
+        <button type="button" data-idioma="es" lang="es">Español</button>
+        <button type="button" data-idioma="en" lang="en">English</button>
+      </div>
 
-      <div class="idiomas">
-        <button type="button" data-idioma="es" lang="es" aria-pressed="true">
-          Español
+      <p data-texto="intro"></p>
+
+      <div class="modos">
+        <button class="modo" type="button" data-modo="practica">
+          <strong data-texto="practica"></strong>
+          <span data-texto="detallePractica"></span>
         </button>
-        <button type="button" data-idioma="en" lang="en" aria-pressed="false">
-          English
+        <button class="modo" type="button" data-modo="reto">
+          <strong data-texto="reto"></strong>
+          <span data-texto="detalleReto"></span>
         </button>
       </div>
 
-      <p id="instrucciones"></p>
-      <button id="empezar" class="principal" type="button"></button>
+      <button class="secundario" type="button" data-guia data-texto="guia"></button>
     </section>
 
     <section id="juego" hidden>
       <div class="estado">
-        <label for="progreso" id="contador"></label>
-        <span id="puntaje"></span>
+        <span id="modo-actual"></span>
+        <label id="contador" for="progreso"></label>
       </div>
-      <progress id="progreso" value="0" max="6"></progress>
+      <progress id="progreso" max="6" value="0"></progress>
 
       <article id="ficha" class="panel ficha">
         <h2 id="pista" tabindex="-1"></h2>
-        <div id="tornasol" class="tornasol" hidden></div>
-        <p id="pregunta"></p>
 
-        <div class="opciones">
+        <div id="medidor" class="medidor" aria-hidden="true" hidden>
+          <span>pH</span>
+          <strong id="lectura"></strong>
+        </div>
+
+        <div id="tornasol" class="tornasol" hidden></div>
+
+        <div id="ayudas" class="ayudas" hidden>
+          <div class="botones">
+            <button id="pedir-pista" type="button"
+              aria-controls="texto-pista" aria-expanded="false"
+              data-texto="verPista"></button>
+            <button type="button" data-guia data-texto="guia"></button>
+          </div>
+          <p id="texto-pista" class="nota" hidden></p>
+        </div>
+
+        <p id="pregunta" data-texto="pregunta"></p>
+        <div class="botones opciones" role="group" aria-labelledby="pregunta">
           <button type="button" data-respuesta="acida"></button>
           <button type="button" data-respuesta="neutra"></button>
           <button type="button" data-respuesta="basica"></button>
@@ -56,13 +77,40 @@
     </section>
 
     <section id="final" class="panel" hidden>
-      <h2 id="resultado" tabindex="-1"></h2>
-      <div class="acciones">
-        <button id="reiniciar" class="principal" type="button"></button>
-        <button id="cambiar-idioma" type="button"></button>
-        <a id="encuesta" class="boton" target="_blank" rel="noopener" hidden></a>
+      <h2 id="fin-titulo" tabindex="-1" data-texto="fin"></h2>
+      <p id="resumen" class="resumen"></p>
+
+      <button id="revisar" type="button" aria-controls="revision"
+        aria-expanded="false" data-texto="revisar"></button>
+
+      <div id="revision" class="revision" hidden>
+        <ol id="errores"></ol>
+      </div>
+
+      <div class="acciones botones">
+        <button id="reiniciar" class="principal" type="button"
+          data-texto="reiniciar"></button>
+        <button id="cambiar-idioma" type="button" data-texto="cambiar"></button>
+        <a id="encuesta" class="boton" target="_blank" rel="noopener"
+          data-texto="encuesta" hidden></a>
       </div>
     </section>
   </main>
+
+  <dialog id="guia" aria-labelledby="guia-titulo">
+    <form method="dialog">
+      <h2 id="guia-titulo" data-texto="guia"></h2>
+      <p data-texto="guiaPh"></p>
+
+      <div class="escala">
+        <span class="acido" data-texto="escalaAcida"></span>
+        <span class="neutro" data-texto="escalaNeutra"></span>
+        <span class="basico" data-texto="escalaBasica"></span>
+      </div>
+
+      <p data-texto="guiaTornasol"></p>
+      <button class="principal" type="submit" autofocus data-texto="cerrar"></button>
+    </form>
+  </dialog>
 </body>
 </html>
