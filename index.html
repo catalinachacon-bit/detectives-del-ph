@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Detectives del pH</title>
+
+  <style>
+    * { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 16px;
+      font: 16px/1.5 system-ui, sans-serif;
+      color: #edf9f8;
+      background: radial-gradient(ellipse at top, #23555b, #101f2b 70%);
+    }
+
+    main {
+      width: min(100%, 600px);
+      padding: clamp(20px, 5vw, 40px);
+      background: #122b38;
+      border: 1px solid #4e7680;
+      border-radius: 24px;
+    }
+
+    h1 {
+      margin-top: 0;
+      color: #a9ffdf;
+      font-size: clamp(32px, 7vw, 48px);
+      line-height: 1.1;
+    }
+
+    h2 { font-size: 24px; }
+    #estado { color: #bde0e6; }
+
+    .botones {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    #opciones button { flex: 1 1 90px; }
+
+    button, a {
+      display: inline-block;
+      min-height: 44px;
+      padding: 10px 16px;
+      border: 1px solid #90bfc6;
+      border-radius: 10px;
+      background: #1d3d49;
+      color: #edf9f8;
+      font: inherit;
+      font-weight: bold;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .principal { background: #a9ffdf; color: #10312d; }
+    .correcta { background: #245743; border-color: #a9ffdf; }
+    .incorrecta { background: #673a3a; border-color: #ffc0b3; }
+    button:disabled { cursor: default; }
+    :focus-visible { outline: 3px solid #fce090; outline-offset: 3px; }
+  </style>
+</head>
+
+<body>
+  <main>
+    <h1>Detectives del pH</h1>
+
+    <section id="inicio">
+      <p>Usa pistas de laboratorio para clasificar seis muestras
+        misteriosas como ácidas, neutras o básicas.</p>
+      <button id="empezar" class="principal">Empezar</button>
+    </section>
+
+    <section id="juego" hidden>
+      <p id="estado"></p>
+      <h2 id="pista" tabindex="-1"></h2>
+      <p>¿Cómo clasificarías esta muestra?</p>
+
+      <div id="opciones" class="botones">
+        <button>Ácida</button>
+        <button>Neutra</button>
+        <button>Básica</button>
+      </div>
+
+      <p id="feedback" role="status"></p>
+      <button id="siguiente" class="principal" hidden>Siguiente</button>
+    </section>
+
+    <section id="final" hidden>
+      <h2 id="resultado" tabindex="-1"></h2>
+      <div class="botones">
+        <button id="reiniciar" class="principal">Volver a jugar</button>
+        <a id="encuesta" hidden>Evalúa el juego</a>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // Pega el enlace para responder a tu Google Form entre las comillas.
+    const enlaceFormulario = "";
+
+    const muestras = [
+      {
+        pista: "El medidor indica pH 3.",
+        respuesta: "Ácida",
+        explicacion: "A 25 °C, un pH menor que 7 indica una solución ácida."
+      },
+      {
+        pista: "El medidor indica pH 7.",
+        respuesta: "Neutra",
+        explicacion: "A 25 °C, un pH de 7 indica una solución neutra."
+      },
+      {
+        pista: "El medidor indica pH 10.",
+        respuesta: "Básica",
+        explicacion: "A 25 °C, un pH mayor que 7 indica una solución básica."
+      },
+      {
+        pista: "El papel tornasol azul cambia a rojo.",
+        respuesta: "Ácida",
+        explicacion: "Una solución ácida cambia el tornasol azul a rojo."
+      },
+      {
+        pista: "El papel tornasol rojo cambia a azul.",
+        respuesta: "Básica",
+        explicacion: "Una solución básica cambia el tornasol rojo a azul."
+      },
+      {
+        pista: "Ninguna tira de tornasol cambia de color. El medidor indica pH 7.",
+        respuesta: "Neutra",
+        explicacion: "La lectura de pH 7 confirma que la muestra es neutra a 25 °C."
+      }
+    ];
+
+    const inicio = document.querySelector("#inicio");
+    const juego = document.querySelector("#juego");
+    const final = document.querySelector("#final");
+    const estado = document.querySelector("#estado");
+    const pista = document.querySelector("#pista");
+    const feedback = document.querySelector("#feedback");
+    const siguiente = document.querySelector("#siguiente");
+    const resultado = document.querySelector("#resultado");
+    const encuesta = document.querySelector("#encuesta");
+    const opciones = document.querySelectorAll("#opciones button");
+
+    let ronda = 0;
+    let puntos = 0;
+
+    if (enlaceFormulario !== "") {
+      encuesta.href = enlaceFormulario;
+      encuesta.hidden = false;
+    }
+
+    function actualizarEstado() {
+      estado.textContent = `Muestra ${ronda + 1} de ${muestras.length} · Puntos: ${puntos}`;
+    }
+
+    function mostrarMuestra() {
+      actualizarEstado();
+      pista.textContent = muestras[ronda].pista;
+      feedback.textContent = "";
+      siguiente.hidden = true;
+
+      for (const boton of opciones) {
+        boton.disabled = false;
+        boton.classList.remove("correcta", "incorrecta");
+      }
+
+      pista.focus();
+    }
+
+    function empezarPartida() {
+      ronda = 0;
+      puntos = 0;
+      inicio.hidden = true;
+      final.hidden = true;
+      juego.hidden = false;
+      mostrarMuestra();
+    }
+
+    function responder(botonElegido) {
+      const muestra = muestras[ronda];
+      const acierto = botonElegido.textContent === muestra.respuesta;
+
+      if (acierto) {
+        puntos++;
+        feedback.textContent = `¡Correcto! ${muestra.explicacion}`;
+      } else {
+        botonElegido.classList.add("incorrecta");
+        feedback.textContent = `La respuesta es ${muestra.respuesta.toLowerCase()}. ${muestra.explicacion}`;
+      }
+
+      for (const boton of opciones) {
+        boton.disabled = true;
+
+        if (boton.textContent === muestra.respuesta) {
+          boton.classList.add("correcta");
+        }
+      }
+
+      actualizarEstado();
+      siguiente.textContent = ronda === muestras.length - 1
+        ? "Ver resultado"
+        : "Siguiente";
+      siguiente.hidden = false;
+      siguiente.focus();
+    }
+
+    for (const boton of opciones) {
+      boton.addEventListener("click", () => responder(boton));
+    }
+
+    siguiente.addEventListener("click", () => {
+      ronda++;
+
+      if (ronda < muestras.length) {
+        mostrarMuestra();
+      } else {
+        juego.hidden = true;
+        final.hidden = false;
+        resultado.textContent = `Puntaje final: ${puntos}/${muestras.length}`;
+        resultado.focus();
+      }
+    });
+
+    document.querySelector("#empezar").addEventListener("click", empezarPartida);
+    document.querySelector("#reiniciar").addEventListener("click", empezarPartida);
+  </script>
+</body>
+</html>
