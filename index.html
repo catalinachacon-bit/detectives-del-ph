@@ -1,10 +1,10 @@
 <!doctype html>
 <html lang="es">
-<link rel="stylesheet" href="./styles.css">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Detectives del pH</title>
+  <link rel="stylesheet" href="./styles.css">
   <script src="./script.js" defer></script>
 </head>
 <body>
@@ -14,9 +14,9 @@
       <h1 data-texto="titulo">Detectives del pH</h1>
     </header>
 
-    <section id="inicio" class="panel">
-      <h2 id="selector" tabindex="-1" data-texto="idioma"></h2>
-      <div class="botones idiomas">
+    <section id="inicio" class="panel" aria-labelledby="titulo-inicio">
+      <h2 id="titulo-inicio" tabindex="-1" data-texto="idioma"></h2>
+      <div class="botones idiomas" role="group" aria-labelledby="titulo-inicio">
         <button type="button" data-idioma="es" lang="es">Español</button>
         <button type="button" data-idioma="en" lang="en">English</button>
       </div>
@@ -34,15 +34,24 @@
         </button>
       </div>
 
-      <button class="secundario" type="button" data-guia data-texto="guia"></button>
+      <button type="button" data-guia data-texto="guia"></button>
     </section>
 
     <section id="juego" hidden>
+      <div class="barra panel">
+        <label for="idioma-partida" data-texto="idioma"></label>
+        <select id="idioma-partida">
+          <option value="es" lang="es">Español</option>
+          <option value="en" lang="en">English</option>
+        </select>
+        <button id="salir" type="button" data-texto="salir"></button>
+      </div>
+
       <div class="estado">
         <span id="modo-actual"></span>
         <label id="contador" for="progreso"></label>
       </div>
-      <progress id="progreso" max="6" value="0"></progress>
+      <progress id="progreso" value="0" max="6"></progress>
 
       <article id="ficha" class="panel ficha">
         <h2 id="pista" tabindex="-1"></h2>
@@ -51,14 +60,12 @@
           <span>pH</span>
           <strong id="lectura"></strong>
         </div>
-
         <div id="tornasol" class="tornasol" hidden></div>
 
         <div id="ayudas" class="ayudas" hidden>
           <div class="botones">
-            <button id="pedir-pista" type="button"
-              aria-controls="texto-pista" aria-expanded="false"
-              data-texto="verPista"></button>
+            <button id="pedir-pista" type="button" aria-controls="texto-pista"
+              aria-expanded="false"></button>
             <button type="button" data-guia data-texto="guia"></button>
           </div>
           <p id="texto-pista" class="nota" hidden></p>
@@ -77,17 +84,16 @@
     </section>
 
     <section id="final" class="panel" hidden>
-      <h2 id="fin-titulo" tabindex="-1" data-texto="fin"></h2>
+      <h2 id="titulo-final" tabindex="-1" data-texto="fin"></h2>
       <p id="resumen" class="resumen"></p>
 
       <button id="revisar" type="button" aria-controls="revision"
-        aria-expanded="false" data-texto="revisar"></button>
-
-      <div id="revision" class="revision" hidden>
+        aria-expanded="false"></button>
+      <div id="revision" hidden>
         <ol id="errores"></ol>
       </div>
 
-      <div class="acciones botones">
+      <div class="botones acciones">
         <button id="reiniciar" class="principal" type="button"
           data-texto="reiniciar"></button>
         <button id="cambiar-idioma" type="button" data-texto="cambiar"></button>
@@ -95,21 +101,39 @@
           data-texto="encuesta" hidden></a>
       </div>
     </section>
+
+    <section id="perdido" class="panel" hidden>
+      <h2 id="titulo-perdido" tabindex="-1" data-texto="perdido"></h2>
+      <p data-texto="intentoTerminado"></p>
+      <button id="volver" class="principal" type="button" data-texto="menu"></button>
+    </section>
   </main>
 
-  <dialog id="guia" aria-labelledby="guia-titulo">
+  <dialog id="guia" aria-labelledby="titulo-guia">
     <form method="dialog">
-      <h2 id="guia-titulo" data-texto="guia"></h2>
+      <h2 id="titulo-guia" data-texto="guia"></h2>
       <p data-texto="guiaPh"></p>
-
       <div class="escala">
         <span class="acido" data-texto="escalaAcida"></span>
         <span class="neutro" data-texto="escalaNeutra"></span>
         <span class="basico" data-texto="escalaBasica"></span>
       </div>
-
       <p data-texto="guiaTornasol"></p>
       <button class="principal" type="submit" autofocus data-texto="cerrar"></button>
+    </form>
+  </dialog>
+
+  <dialog id="confirmar-salida" aria-labelledby="titulo-salida"
+    aria-describedby="aviso-salida">
+    <form method="dialog">
+      <h2 id="titulo-salida" data-texto="salirReto"></h2>
+      <p id="aviso-salida" data-texto="avisoSalida"></p>
+      <div class="botones">
+        <button id="seguir" class="principal" type="submit" value="seguir"
+          autofocus data-texto="seguir"></button>
+        <button class="peligro" type="submit" value="salir"
+          data-texto="salirReto"></button>
+      </div>
     </form>
   </dialog>
 </body>
