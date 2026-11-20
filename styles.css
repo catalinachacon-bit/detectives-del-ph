@@ -2,21 +2,16 @@
   color-scheme: dark;
   --fondo: #071522;
   --panel: #10283a;
-  --borde: #33596c;
+  --borde: #3b6579;
   --texto: #edfaff;
-  --secundario: #bad4df;
+  --secundario: #bfd9e4;
   --turquesa: #78f5dc;
   --correcto: #a0f3bb;
   --error: #ffc2bb;
 }
 
-* {
-  box-sizing: border-box;
-}
-
-[hidden] {
-  display: none !important;
-}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
 
 body {
   min-height: 100vh;
@@ -24,18 +19,16 @@ body {
   padding: clamp(16px, 4vw, 40px);
   display: grid;
   place-items: center;
+  color: var(--texto);
   background:
     radial-gradient(ellipse at top, #124650, transparent 65%),
-    repeating-linear-gradient(0deg, transparent 0 31px, #93e8ff10 31px 32px),
-    repeating-linear-gradient(90deg, transparent 0 31px, #93e8ff10 31px 32px),
+    linear-gradient(#93e8ff12 1px, transparent 1px) 0 0 / 32px 32px,
+    linear-gradient(90deg, #93e8ff12 1px, transparent 1px) 0 0 / 32px 32px,
     var(--fondo);
-  color: var(--texto);
   font: 1rem/1.55 system-ui, sans-serif;
 }
 
-.laboratorio {
-  width: min(100%, 700px);
-}
+.laboratorio { width: min(100%, 700px); }
 
 .encabezado {
   display: flex;
@@ -56,23 +49,10 @@ body {
   font: 700 1.35rem ui-monospace, monospace;
 }
 
-h1,
-h2 {
-  margin: 0;
-  line-height: 1.2;
-}
-
-h1 {
-  font-size: clamp(1.7rem, 6vw, 3rem);
-}
-
-h2 {
-  font-size: clamp(1.25rem, 4vw, 1.65rem);
-}
-
-p {
-  color: var(--secundario);
-}
+h1, h2 { margin: 0; line-height: 1.2; }
+h1 { font-size: clamp(1.7rem, 6vw, 3rem); }
+h2 { font-size: clamp(1.25rem, 4vw, 1.65rem); }
+p { color: var(--secundario); }
 
 .panel {
   padding: clamp(18px, 5vw, 32px);
@@ -82,9 +62,7 @@ p {
   box-shadow: 0 14px 36px #0005;
 }
 
-.ficha {
-  border-top: 3px solid var(--turquesa);
-}
+.ficha { border-top: 3px solid var(--turquesa); }
 
 .estado {
   display: flex;
@@ -103,23 +81,16 @@ progress {
   accent-color: var(--turquesa);
 }
 
-.opciones,
-.acciones {
+.idiomas, .opciones, .acciones {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
 }
 
-.acciones {
-  margin-top: 20px;
-}
+.idiomas, .acciones { margin-top: 18px; }
+.opciones button { flex: 1 1 100px; }
 
-.opciones button {
-  flex: 1 1 100px;
-}
-
-button,
-.boton {
+button, .boton {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -142,42 +113,23 @@ button,
   color: #082c31;
 }
 
-button:hover:not(:disabled),
-.boton:hover {
-  border-color: #fff;
+.idiomas [aria-pressed="true"] {
+  border-color: var(--turquesa);
+  background: #16484d;
+  color: var(--turquesa);
+  box-shadow: inset 0 0 0 1px var(--turquesa);
 }
 
-button:disabled {
-  cursor: default;
-  opacity: 1;
-}
+button:hover:not(:disabled), .boton:hover { border-color: white; }
+button:disabled { cursor: default; opacity: 1; }
+:focus-visible { outline: 3px solid #ffe490; outline-offset: 4px; }
 
-:focus-visible {
-  outline: 3px solid #ffe490;
-  outline-offset: 4px;
-}
+.correcta { background: #173e31; border-color: var(--correcto); }
+.incorrecta { background: #502d35; border-color: var(--error); }
 
-.correcta {
-  background: #173e31;
-  border-color: var(--correcto);
-}
-
-.incorrecta {
-  background: #502d35;
-  border-color: var(--error);
-}
-
-.feedback:empty {
-  margin: 0;
-}
-
-.feedback[data-resultado="correcto"] {
-  color: var(--correcto);
-}
-
-.feedback[data-resultado="error"] {
-  color: var(--error);
-}
+.feedback:empty { margin: 0; }
+.feedback[data-resultado="correcto"] { color: var(--correcto); }
+.feedback[data-resultado="error"] { color: var(--error); }
 
 .tornasol {
   display: grid;
@@ -210,37 +162,17 @@ button:disabled {
   border-radius: 3px;
 }
 
-.tira.azul {
-  background: #6a9cff;
-}
-
-.tira.rojo {
-  background: #ff686e;
-}
+.tira.azul { background: #6a9cff; }
+.tira.rojo { background: #ff686e; }
 
 @keyframes entrar {
-  from {
-    opacity: 0.5;
-    transform: translateY(6px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0.6; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-.ficha.entrada {
-  animation: entrar 200ms ease-out;
-}
+.ficha.entrada { animation: entrar 200ms ease-out; }
 
 @media (prefers-reduced-motion: reduce) {
-  .ficha.entrada {
-    animation: none;
-  }
-
-  button,
-  .boton {
-    transition: none;
-  }
+  .ficha.entrada { animation: none; }
+  button, .boton { transition: none; }
 }

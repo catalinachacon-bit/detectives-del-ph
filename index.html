@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <link rel="stylesheet" href="./styles.css">
 <head>
@@ -10,16 +10,26 @@
 <body>
   <main class="laboratorio">
     <header class="encabezado">
-      <div class="simbolo" aria-hidden="true">pH</div>
-      <h1>Detectives del pH</h1>
+      <span class="simbolo" aria-hidden="true">pH</span>
+      <h1 id="titulo">Detectives del pH</h1>
     </header>
 
-    <section id="inicio" class="panel">
-      <h2>Tu misión de laboratorio</h2>
-      <p>Analiza seis soluciones acuosas a 25 °C. Usa el medidor de pH
-        y el papel tornasol para decidir si cada muestra es ácida,
-        neutra o básica.</p>
-      <button id="empezar" class="principal" type="button">Empezar</button>
+    <section id="inicio" class="panel" aria-labelledby="selector">
+      <h2 id="selector" tabindex="-1">
+        Elige tu idioma / <span lang="en">Choose your language</span>
+      </h2>
+
+      <div class="idiomas">
+        <button type="button" data-idioma="es" lang="es" aria-pressed="true">
+          Español
+        </button>
+        <button type="button" data-idioma="en" lang="en" aria-pressed="false">
+          English
+        </button>
+      </div>
+
+      <p id="instrucciones"></p>
+      <button id="empezar" class="principal" type="button"></button>
     </section>
 
     <section id="juego" hidden>
@@ -32,28 +42,25 @@
       <article id="ficha" class="panel ficha">
         <h2 id="pista" tabindex="-1"></h2>
         <div id="tornasol" class="tornasol" hidden></div>
+        <p id="pregunta"></p>
 
-        <p>¿Cómo clasificarías esta muestra?</p>
-        <div id="opciones" class="opciones">
-          <button type="button" data-respuesta="Ácida">Ácida</button>
-          <button type="button" data-respuesta="Neutra">Neutra</button>
-          <button type="button" data-respuesta="Básica">Básica</button>
+        <div class="opciones">
+          <button type="button" data-respuesta="acida"></button>
+          <button type="button" data-respuesta="neutra"></button>
+          <button type="button" data-respuesta="basica"></button>
         </div>
 
         <p id="feedback" class="feedback" role="status" aria-atomic="true"></p>
-        <button id="siguiente" class="principal" type="button" hidden>
-          Siguiente muestra
-        </button>
+        <button id="siguiente" class="principal" type="button" hidden></button>
       </article>
     </section>
 
     <section id="final" class="panel" hidden>
       <h2 id="resultado" tabindex="-1"></h2>
       <div class="acciones">
-        <button id="reiniciar" class="principal" type="button">Volver a jugar</button>
-        <a id="encuesta" class="boton" target="_blank" rel="noopener" hidden>
-          Evalúa el juego
-        </a>
+        <button id="reiniciar" class="principal" type="button"></button>
+        <button id="cambiar-idioma" type="button"></button>
+        <a id="encuesta" class="boton" target="_blank" rel="noopener" hidden></a>
       </div>
     </section>
   </main>
